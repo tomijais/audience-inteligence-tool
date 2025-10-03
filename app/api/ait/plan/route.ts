@@ -5,7 +5,6 @@ import { GeneratePlanRequestSchema } from '@/app/lib/schemas/ait.schema';
 import { ValidationError } from '@/app/lib/utils/validation';
 import { redactYAML } from '@/app/lib/utils/storage';
 
-// Rate limiting map (simple in-memory, use Redis in production)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): boolean {
@@ -30,7 +29,6 @@ function checkRateLimit(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
     if (!checkRateLimit(ip)) {
       return NextResponse.json(
@@ -39,14 +37,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse and validate request
     const body = await request.json();
     const validatedRequest = GeneratePlanRequestSchema.parse(body);
 
-    // Log redacted YAML
     console.log('Generating plan from YAML:', redactYAML(validatedRequest.yaml_input));
 
-    // Generate plan
     const result = await generatePlan(
       validatedRequest.yaml_input,
       validatedRequest.options
@@ -56,7 +51,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error generating plan:', error);
 
-    // Handle different error types
     if (error instanceof ZodError) {
       return NextResponse.json(
         {
@@ -87,7 +81,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generic error
     return NextResponse.json(
       {
         error: 'Internal server error',

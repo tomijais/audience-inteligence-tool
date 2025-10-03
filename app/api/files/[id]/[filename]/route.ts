@@ -10,7 +10,6 @@ export async function GET(
   try {
     const { id, filename } = params;
 
-    // Security: only allow specific filenames
     const allowedFiles = ['ait.json', 'ait.md', 'ait.pdf'];
     if (!allowedFiles.includes(filename)) {
       return NextResponse.json(
@@ -19,7 +18,6 @@ export async function GET(
       );
     }
 
-    // Check if plan exists
     const exists = await planExists(id);
     if (!exists) {
       return NextResponse.json(
@@ -31,7 +29,6 @@ export async function GET(
     const filePath = join(getDataDir(id), filename);
     const content = await readFile(filePath);
 
-    // Set content type based on file extension
     const contentTypes: Record<string, string> = {
       'ait.json': 'application/json',
       'ait.md': 'text/markdown',

@@ -2,13 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { loadPlan, planExists } from '@/app/lib/utils/storage';
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const { id } = params;
 
-    // Check if plan exists
     const exists = await planExists(id);
     if (!exists) {
       return NextResponse.json(
@@ -17,7 +16,6 @@ export async function GET(
       );
     }
 
-    // Load plan
     const { json, markdown, pdfExists } = await loadPlan(id);
 
     const response: any = {

@@ -16,9 +16,6 @@ export interface LLMMessage {
   content: string;
 }
 
-/**
- * Generate completion using OpenAI API
- */
 export async function generateCompletion(messages: LLMMessage[]): Promise<LLMResponse> {
   const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -45,9 +42,6 @@ export async function generateCompletion(messages: LLMMessage[]): Promise<LLMRes
   };
 }
 
-/**
- * Load system prompt from file
- */
 export async function loadSystemPrompt(): Promise<string> {
   const promptPath = join(process.cwd(), 'prompts', 'SYSTEM_PROMPT_AIT.md');
   return readFile(promptPath, 'utf-8');
