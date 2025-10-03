@@ -140,7 +140,7 @@ export const GeneratePlanRequestSchema = z.object({
   yaml_input: z.string().min(1),
   options: z.object({
     dry_run: z.boolean().optional().default(false),
-  }).optional().default({}),
+  }).optional().default({ dry_run: false }),
 });
 
 export const GeneratePlanResponseSchema = z.object({

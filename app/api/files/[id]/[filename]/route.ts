@@ -38,7 +38,7 @@ export async function GET(
       'ait.pdf': 'application/pdf',
     };
 
-    return new NextResponse(content, {
+    return new NextResponse(new Uint8Array(content), {
       status: 200,
       headers: {
         'Content-Type': contentTypes[filename] || 'application/octet-stream',
